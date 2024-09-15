@@ -3,8 +3,8 @@ const Adapters = require("../adapters");
 const instance = Adapters.getSQLAdapter();
 
 module.exports = {
-  getProgressionMap: async () => {
-    return await instance.execute("panorama.get", `
+  load: async () => {
+    return await instance.execute("progressionMap.get", `
       WITH lesson_progress AS (
     -- Contagem de questões corretas respondidas por lesson para cada usuário
     SELECT

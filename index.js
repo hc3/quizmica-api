@@ -5,7 +5,7 @@ const typeDefs = require('./apollo/schemas');
 const resolvers = require('./apollo/resolvers');
 const bodyParser = require("body-parser");
 const cors = require('cors');
-const panorama = require('./model/panorama');
+const progressionMap = require('./model/progressionMap');
 
 const app = express();
 app.use(bodyParser.json());
@@ -85,7 +85,7 @@ function sortDataByPriority(data) {
 
 app.post("/refreshConfig", async (req, res) => {
   try {
-    const jsonConfig = await panorama.getProgressionMap()
+    const jsonConfig = await progressionMap.load()
     await redis.set("config", JSON.stringify(jsonConfig));
     res
       .status(200)
@@ -97,7 +97,7 @@ app.post("/refreshConfig", async (req, res) => {
 
 
 (async () => {
-  const response = await panorama.getProgressionMap();
+  const response = await progressionMap.load();
   const x = organizeData(response);
   const y = sortDataByPriority(x);
   console.info(y);
